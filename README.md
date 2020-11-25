@@ -1,168 +1,123 @@
-<img align="right" width="450" height="300" src="https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/sparta.jpg">
 
-# **JSF Login App**
+<img align="right" width="250" height="250" src="https://github.com/janjakovacevic/SpartaGlobal/blob/master/Week%205%20-%20Java%20Week%203/DataMigrationProject/program%20screenshots/logo.png">
 
-![java_ee_badge](https://img.shields.io/badge/-Java%20EE-orange?style=for-the-badge&logo=appveyor)
+# **Employees Data Migraton**
+![java_badge](https://img.shields.io/badge/-Java-lightgrey?style=for-the-badge&logo=appveyor)
 ![maven_badge](https://img.shields.io/badge/-Maven-yellow?style=for-the-badge&logo=appveyor) 
-![html_badge](https://img.shields.io/badge/-HTML-blue?style=for-the-badge&logo=appveyor)
-![CSS](https://img.shields.io/badge/-CSS-brightgreen?style=for-the-badge&logo=appveyor)
-![bootstrap](https://img.shields.io/badge/-Bootstrap-purple?style=for-the-badge&logo=appveyor)
+![sql_badge](https://img.shields.io/badge/-SQL-blue?style=for-the-badge&logo=appveyor)
 ![databases](https://img.shields.io/badge/-Databases-red?style=for-the-badge&logo=appveyor)
-![security](https://img.shields.io/badge/-Security-lightgrey?style=for-the-badge&logo=appveyor)
-![glassfish](https://img.shields.io/badge/-Glassfish-black?style=for-the-badge&logo=appveyor)
+![threads](https://img.shields.io/badge/-Multithreading-brightgreen?style=for-the-badge&logo=appveyor)
+![performance](https://img.shields.io/badge/-Performance-orange?style=for-the-badge&logo=appveyor)
+
 
 ### **Table Of Contents**
   * [**Overview**](#overview)
   * [**Technology**](#technology)
-  * [**Demo**](#demo)
-      - [Login Page](#login-page)
-      - [Welcome Page](#welcome-page)
-      - [Admin Page](#admin-page)
-      - [Search Page](#search-page)
-      - [Registration Page](#registration-page)
-      - [Permissions Page](#permissions-page)
-      - [Logout](#logout)
+  * [**Observations**](#observations)
+  * [**Screenshots**](#screenshots)
+      - [Initial Prompt](#initial-prompt)
+      - [Initial Count](#initial-count)
+      - [Select Employee](#select-employee)
+      - [Delete Employee](#delete-employee)
+      - [Count](#count)
+      - [Select Non-Existing Employee](#select-non-existing-employee)
+      - [Exit](#exit)
+  * [**Future Work**](#future-work)
 
 ## **Overview**
-- simple login application with a reasonable way of handling invalid logins
-- user details are kept in a database
-- some aspects of the application are restricted
-    - e.g. accessing resources folder
-- users may have different level of access (permissions/roles)
-- sections of the website are view-able only by those with an admin role
-- an admin is able to add new users to the database and assign them a role
-- an admin is able to perform a search
-- an admin is able to change level of access as they deem fit
+- Reads a CSV file containing employee data of several thousand rows
+- Populate a MySQL database running on the local server
+- The employee data is validated against multiple validation standards in order to then populate the database
+- Each entry of the CSV file stores the following information:
+  - Employee ID
+  - Title
+  - First Name
+  - Middle Initial
+  - Last Name
+  - Gender
+  - Email Address
+  - Date of Birth
+  - Date of Joining the Company
+  - Salary
+- All invalid or duplicate data is stored in separate CSV files that can be found inside resources directory
+- Once the database is populated with CSV entries, the user can then manipulate the database from the command line and perform operations such as 
+  - Selecting an employee by ID
+  - Deleting an employee by ID
+  - Getting a current number of employees in the database
+- The process of writing a CSV file to the program and populating the database is measured for performance speed
+- The performance of the manipulations performed on the database is also measured and displayed upon completion
 
 ## **Technology**
-- Java EE 
-    - provided a vast array of web components 
-- Glassfish 
-    - open-source Jakarta EE platform application server (through Payara)
-- CDI 
-    - Context and Dependency Injection as a standard framework as part of Java EE for creating containers and injecting dependencies (Java Beans)
-- JSF 
-    - Java Server Faces as a web application framework that uses facelets
-    - allowed for building XHTML webpages, templates, managing validation and navigation as well as communication with Java Beans (CDI)
-- JPA 
-    - Java Persistence API as a collection of classes and methods to persistently store the data into a database
-    - a bridge between object models (Java program) and relational models (database program)
-- MySQL 
-    - as a database
-- Security 
-    - authentication, identity store (for credentials for users) and security context APIs
-    - defined via annotations or constraints in web.xml
-    - provided by Soteria (in Glassfish)
-- Bootstrap
-    - open-source HTML, CSS, and JavaScript framework used for styling views
+- MySQL
+  - As a database
+- Threading
+  - Allowed for the persistence of data to occur in a significantly faster manner
+- Reading/Writing
+  - Making use of the BufferedReader in combination with FileReader
+- Logging
+  - Duplicate and invalid records are stored into an external file so they can be manually reviewed at a later point
+- DTO: Data Transfer Object
+  - Used to encapsulate the data and reduce the number of calls to the database (Employee Class)
+- DAO: Data Access Object
+  - Provides CRUD operations without exposing details about the database
 
-## **Demo**
+## **Observations**
 
-### Login Page
-- Upon starting the application, the user will land on the login page were they are then prompted to enter their credentials 
-(`username` and `password`) in order to log in. 
+During the development of this project, multiple ways were found to go about writing data to the database once it has been stored inside the DTO. All those ways involve a combination of one or more of the following commands:
+- `setAutoCommit`: If a connection is in auto-commit mode, then all its SQL statements will be executed and committed as individual transactions. Otherwise, its SQL statements are grouped into transactions that are terminated by a call to either the method commit
+- `executeUpdate`: Executes the given SQL statement and signals the driver with the given flag about whether the auto-generated keys produced by the object should be made available for retrieval
+- `addBatch`: Adds the given SQL command to the current list of commands for this object. The commands in this list are executed as a batch by calling the method executeBatch
+- `tracker`: counter variable that allows executeBatch to be called only when the batch reaches certain size
 
-![login](https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/login.png)
+The performance of the combination of the above commands for both threaded and non-threaded versions of this program is displayed in the table below from fastest to the slowest method.
 
-- In case invalid credentials are entered, the user will be notified and 
-prompted again. 
+![employees times table](https://github.com/janjakovacevic/SpartaGlobal/blob/master/Week%205%20-%20Java%20Week%203/DataMigrationProject/program%20screenshots/employees_times_table.png)
 
-![login-invalid-credentials](https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/login-invalid-credntials.png)
+It has proven that the most efficient way of writing the data to the database involves switching the autoCommit off, batching the added lines and, in doing so, minimising the number of calls made to the database. This speeds up the performance significantly. Adding threading on top of that further cuts down on the time taken to transfer all the data.
 
-- The user will also be notified in case one or both fields are left empty.
+## **Screenshots** 
+Example: `Deleting the employee with EmployeeID = 1998`
 
-![login-required](https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/login-required.png)
+### Initial Prompt
+- When first run - the program will read the CSV file and write it to the database. It will then display the time it took to complete this operation as well as the 
+`Start Menu` allowing the user to choose their next course of action:
 
-### Welcome Page
+![initial prompt](https://github.com/janjakovacevic/SpartaGlobal/blob/master/Week%205%20-%20Java%20Week%203/DataMigrationProject/program%20screenshots/initial%20prompt.png)
 
-- Upon successful login, the user will then land on the welcome page.
+### Initial Count
+- In this demo, a CSV file of 65,500 lines (including the header line) is used. The user can check `how many valid entires` have been written to the database before deleting any of them, by choosing option 3:
 
-![welcome](https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/welcome.png)
+![count - first time](https://github.com/janjakovacevic/SpartaGlobal/blob/master/Week%205%20-%20Java%20Week%203/DataMigrationProject/program%20screenshots/start%20check%20count.png)
 
-### Admin Page
+- The user can see that this file had no duplicate or invalid values. In case there were any `duplicate or invalid values`, CSV files would be created and the values 
+would be written to them - they could be checked in the `resources directory`.
 
-- Accessing further pages requires `admin` status. In the case where a user does not have persmissions of an admin, but still
-attempt to access the admin page, they will be sent to a 403 Forbidden Error Page.
+### Select Employee
+- User can now choose to `look for an employee` using their employee ID. Here - an employee with the ID of 1998. Upon completion of the operation, the program displays the time (in milliseconds) it took to find the specified employee's details as well the details themselves in order in which they are listed above:
 
-![403](https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/403-forbidden.png)
+![select - first time](https://github.com/janjakovacevic/SpartaGlobal/blob/master/Week%205%20-%20Java%20Week%203/DataMigrationProject/program%20screenshots/select%20an%20employee.png)
 
-- If a user is, however, an `admin` and they have appropriate permissions - they will be sent to the Admin Page where they
-can choose between 4 options:
-- `search` for user
-- `registration` of a new user
-- manage `permissions`
-- `logout`
+### Delete Employee
+- Upon completion of an operation, user is yet again prompted with the Start Menu. They can now choose to `delete the employee` with employee ID of 1998. Upon completion of the operation, the program displays the time (in milliseconds) it took to delete the specified employee's details as well the confirmation message: 
 
-![admin](https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/admin.png)
+![delete](https://github.com/janjakovacevic/SpartaGlobal/blob/master/Week%205%20-%20Java%20Week%203/DataMigrationProject/program%20screenshots/delete%20an%20employee.png)
 
-### Search Page
+### Count
+- User is once again prompted with the Start Menu. They can now `verify` the employee has indeed been removed from the database - in 2 ways. `First` they can check the number of all the employees currently stored in the database and compare it to the number he previously had:
 
-- By selecting the `search` option from admin page, the `admin` is sent to the search page where they can perform a search in 2 different ways:
-    - by `userID`
-    - by `username`
+![count - second time](https://github.com/janjakovacevic/SpartaGlobal/blob/master/Week%205%20-%20Java%20Week%203/DataMigrationProject/program%20screenshots/check%20count%20after%20deletion.png)
 
-![search](https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/search.png)
+### Select Non-Existing Employee
+- `Second` way of ensuring the employee has been deleted is by trying to select the same employee once again:
 
-- If an invalid input is encountered or no user with the specified criteria exists, the `admin` is notified.
+![select - second time](https://github.com/janjakovacevic/SpartaGlobal/blob/master/Week%205%20-%20Java%20Week%203/DataMigrationProject/program%20screenshots/try%20selecting%20the%20deleted%20employee.png)
 
-![search-failure](https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/search-failure.png)
+### Exit
+- Now that the user has successfully deleted a user from the database, they can choose to perform more operations or simply `exit the program`. By choosing option 4, the program exits.
+![exit](https://github.com/janjakovacevic/SpartaGlobal/blob/master/Week%205%20-%20Java%20Week%203/DataMigrationProject/program%20screenshots/exit.png)
 
-- If a user was found, and the search was successful, the `admin` is then sent to the next page that displays the search results including:
-    - `userID`
-    - `username`
-    - `first name`
-    - `last name`
-    - `role`
-
-![search-success](https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/search-success.png)
-
-- Upon performing the search, the `admin` can then choose to:
-     - perform another `search`
-     - return to the `admin page`
-     - `logout`
- 
-### Registration Page
-
-- By selecting `registration` option from admin page, the `admin` is sent to the registration page where they, as an admin, can register
-a new user. They do so by populating all the required fields in the registration form and assigning appropriate permission/role (`ADMIN` or `USER`).
-
-![registration](https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/registration.png)
-
-- If invalid input is detected, the `admin` will be notified and prompted to input correct information again.
-
-![registration-failure](https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/registration-failure.png)
-
-- If all field inputs are valid, and the registration was successful, the `admin` is then sent to the next page that displays the information of 
-the newly registered user.
-
-![registration-success](https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/registration-success.png)
-
-- In case when an `admin` tries to create a user with an already existing username, registration won't be allowed. The `admin` will be notified and prompted
-to choose a different username.
-
-![registration-duplicate](https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/registration-duplicate.png)
-
-- Upon performing the registration, the `admin` can then choose to:
-     - perform another `registration`
-     - return to the `admin page`
-     - `logout`
-
-### Permissions Page
-
-- By selecting the `permissions` option from admin page, the user is sent to the permissions page where they can change access permissions for any user.
-User is asked to select the user they want to change the permission for as well as the permission level they would like to assign them.
-
-![permissions](https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/permissions.png)
-
-- Upon updating the permission for the selected user, they user is sent to the next page confirming the update was successful.
-
-![permissions-success](https://github.com/janjakovacevic/SpartaGlobalJavaDevCourse/blob/Eng72/12-Labs/01-JSFLoginApp/JSFLoginApplication/program%20screenshots/permission-success.png)
-
-- Upon performing the registration, the `admin` can then choose to:
-     - manage another `permission`
-     - return to the `admin page`
-     - `logout`
-
-### Logout
-
-- When the user chooses to logout, the session ends and they are sent back to the login page.
+## **Future Work**
+Possible improvments for `Data Migration 2.0`
+  - Update employee's details
+  - Add a new employee
+  - Add a front end
