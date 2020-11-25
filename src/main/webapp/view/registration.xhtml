@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:view>
+    <h:outputStylesheet library="css" name="style.css"/>
+
+    <h:body>
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+            <ui:define name="content">
+                <div class="jumbotron">
+                    <h1 class="display-4">Welcome to the Registration Page</h1>
+                    <p class="lead">Here you can add a user to the database by inputting all the required infomation below</p>
+                    <h:form>
+                        <h:messages id="messages" globalOnly="true" infoClass="info" errorClass="error"/>
+                        <br/>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Username: "/>
+                            <h:inputText id="username" value="#{registrationBean.userEntity.username}" styleClass="textField"/>
+                            <h:outputLabel value="Password: "/>
+                            <h:inputText id="password" value="#{registrationBean.userEntity.password}" styleClass="textField"/>
+                            <h:outputLabel value="First Name: "/>
+                            <h:inputText id="firstName" value="#{registrationBean.userEntity.firstName}" styleClass="textField"/>
+                            <h:outputLabel value="Last Name: "/>
+                            <h:inputText id="lastName" value="#{registrationBean.userEntity.lastName}" styleClass="textField"/>
+                            <h:outputLabel value="Role: "/>
+                            <h:selectOneMenu value = "#{registrationBean.userEntity.role}" styleClass="selectionMenu">
+                                <f:selectItem itemValue = "USER" itemLabel = "USER" />
+                                <f:selectItem itemValue = "ADMIN" itemLabel = "ADMIN" />
+                            </h:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1">
+                            <h:commandButton value="ADD USER" action="#{registrationBean.register}" styleClass="button whiteButton"/>
+                            <hr class="my-4"/>
+                            <h:commandButton value="GO BACK TO ADMIN PAGE" action="admin?faces-redirect=true" styleClass="button pinkButton"/>
+                            <h:commandButton value="LOGOUT" action="#{logoutBean.logout}" styleClass="button pinkButton"/>
+                        </h:panelGrid>
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</f:view>
+</html>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:view>
+    <ui:composition template="/WEB-INF/templates/template.xhtml">
+        <ui:define name="content">
+            <div class="jumbotron">
+                <h1 class="display-4">Welcome to the Admin Page, #{request.userPrincipal.name}</h1>
+                <p class="lead">Here you can choose to perform admin actions including:</p>
+                <hr class="my-4"/>
+                <h:form>
+                    <div align="center">
+                        <h:panelGrid columns="1">
+                            <p style="text-align: center">searching for an existing user by userID or first name</p>
+                            <h:commandButton value="SEARCH" action="search?faces-redirect=true" styleClass="button whiteButton"/>
+                            <br/>
+                            <p style="text-align: center">adding a new user to the database</p>
+                            <h:commandButton value="REGISTRATION" action="registration?faces-redirect=true" styleClass="button whiteButton"/>
+                            <br/>
+                            <p style="text-align: center">changing access permissions</p>
+                            <h:commandButton value="PERMISSIONS" action="changePermissions?faces-redirect=true" styleClass="button whiteButton"/>
+
+                            <hr class="my-4"/>
+                            <h:commandButton value="LOGOUT" action="#{logoutBean.logout}" styleClass="button pinkButton"/>
+                        </h:panelGrid>
+                    </div>
+                </h:form>
+            </div>
+        </ui:define>
+    </ui:composition>
+</f:view>
+</html>

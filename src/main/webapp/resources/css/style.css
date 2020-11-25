@@ -1,0 +1,105 @@
+
+:root {
+    --spartaPink: #d91e4f;
+    --spartaBlack: #150000;
+    --spartaGrey: #ccc;
+}
+
+body {
+    margin: 10px;
+    font-family: Verdana, sans-serif;
+    color: lightgrey;
+    background: var(--spartaBlack);
+}
+
+.container .jumbotron{
+    color: lightgrey;
+    background: var(--spartaBlack);
+}
+
+.content {
+    padding: 30px 30px 30px 30px;
+}
+
+.footer {
+    padding: 10px;
+    margin: 40px 100px 40px 100px;
+    background-color: var(--spartaPink);
+}
+
+input, .selectionMenu {
+    width: 100%;
+    padding: 14px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid var(--spartaGrey);
+    box-sizing: border-box;
+    align-content: end;
+    text-align: center;
+}
+
+.pinkText{
+    font-weight:bold;
+    color: var(--spartaPink);
+    text-align:center;
+}
+
+label{
+    width: 100%;
+    padding: 14px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    text-align: left;
+}
+
+.labelCenter{
+    text-align: center;
+}
+
+.button{
+    margin: 8px 0px;
+    padding: 14px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.pinkButton{
+    background-color: var(--spartaPink);
+    color: white;
+}
+
+.whiteButton{
+    background-color: white;
+    color: var(--spartaBlack);
+}
+
+.loginButton {
+    width: 30%;
+}
+
+.welcomeButton {
+    width: 40%;
+}
+
+.info{
+    color: white;
+    list-style: none;
+}
+
+.error{
+    color: var(--spartaPink);
+    list-style: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+

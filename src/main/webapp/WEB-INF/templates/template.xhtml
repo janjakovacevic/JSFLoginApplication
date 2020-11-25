@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <h:outputStylesheet name="style.css" library="css"/>
+    <h:outputStylesheet name="webjars/bootstrap/4.5.2/css/bootstrap.min.css"/>
+
+    <title>JSF Login Application</title>
+</h:head>
+<h:body>
+    <div class="container" align="center">
+        <div class="jumbotron">
+            <div class="header">
+                <ui:insert name="header">
+                    <ui:include src="headerTemplate.xhtml"/>
+                </ui:insert>
+            </div>
+            <div class="content">
+                <ui:insert name="content">
+                    <ui:include src="contentTemplate.xhtml"/>
+                </ui:insert>
+            </div>
+            <div class="footer">
+                <ui:insert name="footer">
+                    <ui:include src="footerTemplate.xhtml"/>
+                </ui:insert>
+            </div>
+        </div>
+    </div>
+</h:body>
+
+</html>
